@@ -1,0 +1,14 @@
+[project]
+name = "mujoco-tutorial"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ipywidgets>=8.1.8",
+    "jupyterlab>=4.5.7",
+    "matplotlib>=3.10.9",
+    "mujoco>=3.9.0",
+    "opencv-python>=4.13.0.92",
+    "pyglet>=2.1.14",
+]

@@ -1,0 +1,44 @@
+<mujoco model="fingeredu">
+  <compiler angle="radian" meshdir="../meshes/"/>
+
+  <asset>
+    <mesh name="base_back" content_type="model/stl" file="base_back.stl"/>
+    <mesh name="base_front" content_type="model/stl" file="base_front.stl"/>
+    <mesh name="base_side_left" content_type="model/stl" file="base_side_left.stl"/>
+    <mesh name="base_top" content_type="model/stl" file="base_top.stl"/>
+    <mesh name="upper_link" content_type="model/stl" file="upper_link.stl"/>
+    <mesh name="middle_link" content_type="model/stl" file="middle_link.stl"/>
+    <mesh name="lower_link" content_type="model/stl" file="lower_link.stl"/>
+  </asset>
+
+  <worldbody>
+    <body name="finger_base_link" pos="0 0 0.05">
+      <geom pos="-0.17995 0 0.283" type="mesh" contype="1" conaffinity="1" rgba="0.6 0.6 0.6 1" mesh="base_back"/>
+      <geom pos="0.0255 0 0.283" type="mesh" contype="1" conaffinity="1" rgba="0.6 0.6 0.6 1" mesh="base_front"/>
+      <geom pos="0.0255 0.02 0.363" quat="1 0 0 0"  contype="0" conaffinity="0"  type="mesh" rgba="0.6 0.6 0.6 1" mesh="base_side_left"/>
+      <geom pos="0.0255 0 0.363" quat="1 0 0 0"  contype="0" conaffinity="0"  type="mesh" rgba="0.6 0.6 0.6 1" mesh="base_top"/>
+      <body name="finger_upper_link" pos="0 0 0.283">
+        <inertial pos="-0.079 0 0" quat="0.531109 0.531109 0.466822 0.466822" mass="0.14854" diaginertia="0.000416469 0.00041 2.35312e-05"/>
+        <joint name="finger_base_to_upper_joint" pos="0 0 0" axis="-1 0 0" range="-1.5708 1.5708" actuatorfrcrange="-1 1"/>
+        <geom pos="0.0195 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.6 0.6 0.6 1" mesh="upper_link"/>
+        <body name="finger_middle_link" pos="0 -0.014 0">
+          <inertial pos="0 -0.019 -0.079" quat="0.705644 0.0454575 -0.0454575 0.705644" mass="0.14854" diaginertia="0.000416469 0.00041 2.35312e-05"/>
+          <joint name="finger_upper_to_middle_joint" pos="0 0 0" axis="0 1 0" range="-1.5708 1.5708" actuatorfrcrange="-1 1"/>
+          <geom type="mesh" rgba="0.6 0.6 0.6 1"  contype="1" conaffinity="1"  mesh="middle_link"/>
+          <body name="finger_lower_link" pos="0 -0.03745 -0.16">
+            <inertial pos="0 -0.0087543 -0.106445" quat="0.999999 0.00170537 0 0" mass="0.0407" diaginertia="0.000158198 0.000158193 1.17238e-06"/>
+            <joint name="finger_middle_to_lower_joint" pos="0 0 0" axis="0 1 0" range="-3.14159 3.14159" actuatorfrcrange="-1 1"/>
+            <geom type="mesh" rgba="0.6 0.6 0.6 1"  contype="1" conaffinity="1"  mesh="lower_link"/>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="finger_base_to_upper_joint" joint="finger_base_to_upper_joint"/>
+    <motor name="finger_upper_to_middle_joint" joint="finger_upper_to_middle_joint"/>
+    <motor name="finger_middle_to_lower_joint" joint="finger_middle_to_lower_joint"/>
+  </actuator>
+
+</mujoco>
