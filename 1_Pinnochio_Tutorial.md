@@ -187,6 +187,12 @@ xi = pin.log(T)         # SE3 → se(3): a 6D "twist" vector [v; omega]
 T  = pin.exp(xi)        # se(3) → SE3
 ```
 
+```
+Note: The eg should be calculated using SE(3) Operations and then transformed into se(3)
+
+error = T_current.inverse() * T_desired "= _current_T_desired_" 
+```
+
 This is critical for computing errors in controllers. You should **never** subtract rotation matrices. Instead:
 ```python
 T_error = T_current.inverse() * T_target
