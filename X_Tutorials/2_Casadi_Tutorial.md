@@ -29,9 +29,9 @@ X = ca.MX.sym("X", 2, 2)    # symbolic, but kept as a single graph node
 A = ca.DM([[1, 2], [3, 4]]) # pure numeric matrix
 ```
 
-- **`SX`** — best for small, explicit expressions (costs, residuals, kinematics kernels).
-- **`MX`** — best for composing large graphs or calling `Function`s inside a bigger expression.
-- **`DM`** — numeric only; used for actual data going in/out of functions and solvers.
+- **`SX`** — best for small, explicit expressions (costs, residuals, kinematics kernels). (Scalar eXpression)
+- **`MX`** — best for composing large graphs or calling `Function`s inside a bigger expression. (Matrix eXpression)
+- **`DM`** — numeric only; used for actual data going in/out of functions and solvers. (Dense Matrix)
 
 **Never mix `SX` and `MX` directly in one expression** — it raises a `TypeError`. The fix: wrap the `SX` expression in a `Function`, then call that function from the `MX` graph:
 
@@ -39,6 +39,13 @@ A = ca.DM([[1, 2], [3, 4]]) # pure numeric matrix
 sx_fun = ca.Function("sx_fun", [X_sx, y_sx], [f_sx])
 composed_mx = sx_fun(ca.DM.eye(2), 1.0) + X_mx   # works
 ```
+
+### SX Matrix vs MX Matrix
+```
+- Operations with SX Matrices consist of multiple scalar operations -> Extended Computation Time depending on how large is the SX Matrix
+- Operations with MX Matrices are computed with nodes -> Reduced Computation Time (Node Computation)
+```
+
 
 ### Elementwise `*` vs. Matrix `@`
 
@@ -55,6 +62,26 @@ ca.SX.zeros(3, 3)          # dense zero (structural entries present)
 ca.SX(3, 3)                 # sparse zero (no structural entries)
 ca.SX.sym("L", ca.Sparsity.lower(3))  # symbols only in the lower triangle
 ```
+
+- **`Whats Sparcity?`** — Sparsity describes how many entries of a matrix are zero. A matrix is called sparse when most of its elements are zero. A matrix with mostly nonzero entries is called dense.
+
+- **`Why does Sparcity matters?`** — Instead of storing every zero, sparse matrix formats store only:
+the nonzero values,
+their row indices,
+their column indices.
+This is important in tools such as CasADi, where optimization solvers exploit sparse Jacobians and Hessians to solve large problems efficiently.
+
+Important Distctition Numerical Zero and Structural Zero:
+
+- **`Numerical Zero`** — Numerical zero: the value currently happens to be zero.
+- **`Numerical Zero`** — the element is always zero because there is no dependency. 
+
+Remark: 
+- **A sparse matrix** stores or operates mainly on entries that are structurally allowed to be nonzero.
+
+- **A dense matrix** treats every position as a potentially meaningful entry, even when some current values are zero.
+
+
 
 ### Automatic Differentiation
 
